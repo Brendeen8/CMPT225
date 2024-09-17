@@ -1,4 +1,4 @@
-#ifndef STACK_H
+#ifndef STACK_H // idk what these are for yet but just rememeber to put them in
 #define STACK_H
 
 class MyStack {
@@ -7,7 +7,7 @@ class MyStack {
     ~MyStack(); //destructor
 
     void push(int val);
-  int pop(int);
+    int pop();
     int size();
     void print();
 

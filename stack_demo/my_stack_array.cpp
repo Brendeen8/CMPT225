@@ -3,11 +3,11 @@
 using std::cout;
 using std::endl;
 
-MyStack::MyStack() {
+MyStack::MyStack() { // define private variables in default contructor
 
   top = 0;
   capacity = 5;
-  container = new int[capacity]; //new keywords puts element on heap
+  container = new int[capacity]; // new keyword puts element on heap
 }
 
 MyStack::~MyStack() {
@@ -15,21 +15,21 @@ MyStack::~MyStack() {
   delete container; //need to clear everything on heap
 }
 
-void MyStack::push(int val) {
+void MyStack::push(int val) { // insert at top of stack
 
-  container[top] = val; // makes top value equal to val
+  container[top] = val; // makes top value equal to given val
   top = top + 1; // increment top
 }
 
-int MyStack::pop():
+int MyStack::pop(): // remove and return top item
 {
   // does not consider if stack is empty
   int val = container[top - 1] // subtract 1 since top points to the next element that will be added
-  top = top - 1;
+  top = top - 1; // deincrement top
   return val;
 }
 
-int MyStack::size()
+int MyStack::size() // top is the same value of size but we need to use this since top is private
 {
   return top;
 }
