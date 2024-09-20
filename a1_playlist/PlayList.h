@@ -70,7 +70,8 @@ public:
 	unsigned int size() const;
 
 private:
-	// TO DO
+	PlayListNode* head;
+  int current_size;
 
 
 };
