@@ -1,3 +1,37 @@
+/*
+Time Complexity:
+
+    Default constructor
+      O(1) - only 2 variables in constant time
+    Destructor
+      O(n) - dependent on n nodes in while loop
+    Copy constructor
+      O(n) - dependent on n nodes in while loop 
+    Overloaded assignment operator
+      O(n) - dependent on n nodes in while loop
+    Insert
+      O(n) - dependent on n nodes in for loop
+    Remove
+      O(n) - dependent on n nodes in for loop
+    Get
+      O(n) - dependent on n nodes in for loop
+    Swap
+      O(n) - dependent on n nodes in for loop
+      even though there are 2 for loops, they
+      are not nested and we only account for max time 
+    Size
+      O(1) - return is in constant time
+
+    Enter a song
+      O(n) - dependent on valid input while loop
+    Remove a song
+      O(n) - dependent on valid input while loop
+    Swap two songs
+      O(1) - no loops and all lines are in constant time
+    Print all the songs
+      O(n) - dependent on for loop of playlist size
+
+*/
 #include <iostream>
 #include <string>
 #include <limits>
