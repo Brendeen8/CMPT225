@@ -1,12 +1,12 @@
-undo: StringList.o StringListTest.o 
-	g++ -g -o undo StringList.o StringListTest.o 
+undo: StringList.o StringListTest.o
+	g++ -std=c++17 -o undo StringList.o StringListTest.o
 
 StringList.o: StringList.cpp StringList.h
-	g++ -c StringList.cpp
+	g++ -std=c++17 -Wall -c StringList.cpp
 
-StringListTest.o: StringListTest.cpp
-	g++ -c StringListTest.cpp
-
+StringListTest.o: StringListTest.cpp StringList.h
+	g++ -std=c++17 -Wall -c StringListTest.cpp
 
 clean:
 	rm -f *.o undo
+

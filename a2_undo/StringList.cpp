@@ -28,6 +28,14 @@ StringList& StringList::operator=(const StringList& other)
 {
 	if(&other != this)
 	{
+    if(undoing == true && n > 0) {
+      string command = "COPY ";
+      for (int i = 0; i < n; i++) {
+        command += arr[i] + " ";
+      }
+      undoStack.push(command);
+    }
+    undoing = true;
 		delete[] arr;
 		copyList(other);
 	}
@@ -173,9 +181,6 @@ void StringList::insertFront(string str)
 void StringList::insertBack(string str)
 {
 	checkCapacity();
-  if(undoing == true) {
-    undoStack.push("REMOVE " + to_string(n));
-  }
   undoing = true;
 	insertBefore(n, str);
 }
@@ -200,20 +205,30 @@ void StringList::remove(int pos)
 // Empties the list
 void StringList::removeAll()
 {
+  if(undoing == true && n > 0) {
+    string command = "COPY ";
+    for (int i = 0; i < n; i++) {
+      command += arr[i] + " "; // Add list element to command string
+    }
+    undoStack.push(command);
+  }
+
 	for (int i = 0; i < n; i++) {
 		arr[i] = "";
 	}
+  undoing = true;
 	n = 0;
 }
 
 // Undoes the last operation that modified the list
 void StringList::undo()
 {
+  // Check if list is empty
   if (undoStack.isStackEmpty()) {
     cout << "Nothing to Undo" << endl;
     return;
   }
-  undoing = false;
+  undoing = false; // Set to false so undo doesn't undo itself in function
   string command = undoStack.pop(); // Get element from stack
   string action = command.substr(0, command.find(" ")); // Take the substring from 0 to space
                                                          
@@ -222,14 +237,25 @@ void StringList::undo()
     remove(index);
   }
   else if (action == "SET") {
-    int index = stoi(command.substr(4));
-    string word = command.substr(command.find(" ", 4) + 1);
+    int index = stoi(command.substr(4)); // Get index
+    string word = command.substr(command.find(" ", 4) + 1); // Get word
     set(index, word);
   }
   else if (action == "INSERT") {
-    int index = stoi(command.substr(7));
-    string word = command.substr(command.find(" ", 7) + 1);
+    int index = stoi(command.substr(7)); // Get index
+    string word = command.substr(command.find(" ", 7) + 1); // Get word
     insertBefore(index, word);
+  }
+  else if (action == "COPY") {
+    removeAll(); // Clear List
+
+    size_t pos = 5; // Set Position
+    while (pos != string::npos) { // Loop until list empty
+      size_t nextspace = command.find(" ", pos); // Find next position in command
+      string element = command.substr(pos, nextspace - pos); // Get next element
+      insertBack(element); 
+      pos = (nextspace == string::npos) ? string::npos : nextspace + 1; // Go to nextspace 
+    }
   }
   
 }
@@ -288,6 +314,7 @@ StringList::Stack::~Stack()
   delete[] myStack;
 }
 
+// Push element from stack
 void StringList::Stack::push(string str)
 {
   checkStackCapacity();
@@ -295,6 +322,7 @@ void StringList::Stack::push(string str)
   topIndex++;
 }
 
+// Pop element from stack
 string StringList::Stack::pop()
 {
   if(!myStack||isStackEmpty()) {
@@ -308,19 +336,22 @@ string StringList::Stack::pop()
 
 bool StringList::Stack::isStackEmpty() const
 {
-return topIndex == 0;
+  return topIndex == 0;
 }
 
 void StringList::Stack::checkStackCapacity()
 {
+  // Double if full
   if(topIndex == capacity) {
-    int capacity = capacity * 2;
-    string* newStack = new string[capacity];
+    int newCapacity = capacity * 2;
+    string* newStack = new string[newCapacity];
 
+    // Copy elements
     for(int i = 0; i < topIndex; i++) {
       newStack[i] = myStack[i]; 
     } 
     delete[] myStack;
     myStack = newStack;
+    capacity = newCapacity;
   }
 }
