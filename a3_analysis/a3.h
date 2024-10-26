@@ -104,71 +104,95 @@ int* matrixSelfMultiply(int* m, int rows, int & ops)
 
 
 // PARAM: arr is array to be sorted, n is size of array, i should initially = 0
-void ssort(int arr[], int n, int i)
+void ssort(int arr[], int n, int i, int & ops)
 {
        if (i < n-1) {
               // Find and swap smallest remaining
               int next = i + 1;
               int smallest = i;
+              ops += 3;
 
               while (next < n) {
                      if (arr[next] < arr[smallest]) {
                           smallest = next;
                      }
                      next++;
+                     ops += 4;
               }
+              ops += 1;
 
               // Swap i with smallest
               int temp = arr[i];
               arr[i] = arr[smallest];
               arr[smallest] = temp;
-              ssort(arr, n, i + 1);
+              ops += 4;
+              ssort(arr, n, i + 1, ops);
+       }
+       else {
+         ops++;
        }
 }
 
 // PRE: n is a power of 2 greater than zero.
 // PRE: Initial call should be to i = 0
 // e.g. pattern(8, 0)
-void pattern(int n, int i)
+void pattern(int n, int i, int & ops)
 {
        if (n > 0) {
-              pattern(n/2, i);
+              ops += 1;
+              pattern(n/2, i, ops);
+              ops++;
               // Print i spaces
               cout << string(i, ' ');
+              ops++;
 
               // A loop to print n asterisks, each one followed by a space
               int ast = 0;
+              ops++;
               while (ast < n) {
                      cout << "* ";
                      ast++;
+                     ops += 3;
               }
+              ops++;
 
               cout << endl;
               i += n;
-              pattern(n / 2, i);
+              ops += 2;
+              pattern(n / 2, i, ops);
+              ops++;
        }
 }
 
 // Desc: Linear search.  Reports position if found, else -1
 // Post:  Elements unchanged
-int lsearch(int arr[], unsigned int len, int target) {
+int lsearch(int arr[], unsigned int len, int target, int & ops) {
+    ops++;
     if (len == 0) return -1;
+    ops++;
     if (arr[0] == target) return 0;
-    if (lsearch(arr+1, len-1, target) == -1) {
+    ops ++;
+    if (lsearch(arr+1, len-1, target, ops) == -1) {
         return -1;
     } else {
-        return 1 + lsearch(arr+1, len-1, target);
+        ops++;
+        return 1 + lsearch(arr+1, len-1, target, ops);
     }
 } // lsearch
 
-unsigned pow(unsigned int base, unsigned int exp) {
+unsigned pow(unsigned int base, unsigned int exp, int& ops) {
     unsigned int ret = 1;
+    ops +=1;
     while (exp > 0) {
+        ops++;
         if (exp & 1) {
             ret *= base;
+            ops += 2;
         }
         exp >>= 1;
         base = base * base;
+        ops += 2;
     }
+    ops++;
     return ret;
 } // pow
