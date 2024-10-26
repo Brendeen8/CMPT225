@@ -65,7 +65,12 @@ void ArrayClass::set(int i, int value)
   if(i < 0 || i >= n) {
     throw std::out_of_range("set(i) out of range");
   }
+  if(value < 0) {
+    throw  std::invalid_argument("set(value) invalid");
+  }
+  else{
 	arr[i] = value;
+  }
 }
 
 // Gets the value at the noted index

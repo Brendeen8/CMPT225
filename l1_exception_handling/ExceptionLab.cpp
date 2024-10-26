@@ -42,6 +42,10 @@ void exceptionTest() {
 
 	// Get and set values (which may throw errors)
 	try {
+    for(int i = 0; i <= ac.size() -1 ; i++) {
+      ac.set(i,-1);
+      cout << ac.get(i) << endl;
+    }
 		// "Accidentally" access the 11th element
 		for (int i = 0; i <= ac.size(); ++i) {
 			cout << ac.get(i) << endl;
