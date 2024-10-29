@@ -13,7 +13,7 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-void basicTest();
+//void basicTest();
 void profile(string fname);
 
 vector<string> readFile(string infile);
@@ -21,8 +21,8 @@ vector<string> readFile(string infile);
 int main()
 {
 	try {
-		basicTest();
-		//profile("animals_rand.txt");
+		//basicTest();
+		profile("animals_rand.txt");
 		cout << endl;
 		return 0;
 	}
@@ -49,7 +49,7 @@ vector<string> readFile(string infile)
 
 	return result;
 }
-
+/*
 // Test before profiling SortedList insert method
 void basicTest()
 {
@@ -61,26 +61,26 @@ void basicTest()
 	}
 	cout << "list contains " << list.size() << " values." << endl;
 }
-
+*/
 // Reaf file into list and print operations performed
 // PARAM: fname is the name of the file to be opened
 void profile(string fname)
 {
-	//unsigned int count = 0;
-	//unsigned int total = 0;
-	//SortedList list(200);
+	unsigned int count = 0;
+	unsigned int total = 0;
+	SortedList list(200);
 
-	//vector<string> vs = readFile("animals_sort.txt");
+	vector<string> vs = readFile("animals_sort.txt");
 
-	//for (string s : vs) {
-	//	list.insert(s, count);
-	//	total += count;
-	//	cout << "insert " << s << ", operations = " << count << endl;
-	//}
+	for (string s : vs) {
+		list.insert(s, count);
+		total += count;
+		cout << "insert " << s << ", operations = " << count << endl;
+	}
 
-	//cout << endl;
-	//cout << "list contains " << list.size() << " values." << endl;
-	//cout << "total operations performed = " << total << endl;
+	cout << endl;
+	cout << "list contains " << list.size() << " values." << endl;
+	cout << "total operations performed = " << total << endl;
 }
 
 

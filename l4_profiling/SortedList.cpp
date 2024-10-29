@@ -43,7 +43,7 @@ SortedList::~SortedList(void)
 // Inserts a string into the list
 // PARAM: s is the string to be inseted
 // POST: s is inserted in the list in alphabetic order
-void SortedList::insert(string s)
+void SortedList::insert(string s, unsigned int & ops)
 {
 	// Throw an error if the array is full
 	if (current >= max) {

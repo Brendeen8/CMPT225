@@ -15,7 +15,7 @@ public:
 	~SortedList(void);
 
 	// Mutators
-	void insert(string s);
+	void insert(string s, unsigned int & ops);
 	//void insert(string s, unsigned int & count);
 	bool remove(string s);
 
