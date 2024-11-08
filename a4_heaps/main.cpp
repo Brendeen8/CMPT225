@@ -1,4 +1,4 @@
-#include "Heapt.h"
+#include "HeapT.h"
 #include <iostream>
 #include <stdexcept>
 
