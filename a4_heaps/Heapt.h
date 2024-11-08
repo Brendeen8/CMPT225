@@ -136,15 +136,15 @@ int HeapT::size() const {
  return currentSize;
 }
 
-// Heapify Helper Function
+// Heapify Up Helper Function
 void HeapT::heapifyUp(int index) {
   
   // Loop until root
   while(index > 0) {
     int parent = (index - 1)/2;
 
-    // Break if index value is less than its parent
-    if(arr[index] <= arr[parent]) {
+    // Break if index value is greater than its parent
+    if(arr[index] >= arr[parent]) {
       break;
     }
     // Switch index and it's parent
@@ -167,8 +167,8 @@ void HeapT::heapifyDown(int index) {
       largerChild = rightChild;
     }
 
-    // Stop when the index value is greater than both children
-    if(arr[index] >= arr[largerChild]) {
+    // Stop when the index value is less than both children
+    if(arr[index] <= arr[largerChild]) {
       break;
     }
     swap(arr[index], arr[largerChild]);
