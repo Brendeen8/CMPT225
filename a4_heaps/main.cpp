@@ -9,10 +9,29 @@ int main (void) {
   cout << "Creating Heap:" << endl;
   HeapT myHeap(10);
   
-  for(int i = 0; i <= 20; i++) {
+  for(int i = 0; i <= 9; i++) {
     myHeap.insert(i);
-    cout << myHeap.peek() << endl;
+    cout << myHeap.peek() << " ";
   }
+  cout << endl;
+
+  HeapT myHeap2(10);
+  myHeap2 = myHeap;
+
+  for(int i = 0; i <= 9; i++) {
+    cout << myHeap.peek() << " ";
+    myHeap.remove();
+  }  
+  cout << endl;
+
+  for(int i = 0; i <= 9; i++) {
+    cout << myHeap2.peek() << " ";
+    myHeap2.remove();
+  }
+cout << endl;
+
+
+  
   
 
   return 1;
