@@ -1,5 +1,6 @@
 //#pragma once
 
+template <class T>
 class HeapT {
 
 public:   
@@ -17,13 +18,13 @@ public:
   HeapT& operator=(const HeapT& other);
 
   // Insert Function
-  void insert(int val);
+  void insert(T val);
 
   // Remove Function
-  int remove();
+  T remove();
 
   // Peek Function
-  int peek() const;
+  T peek() const;
 
   // Merge Function
   HeapT merge(const HeapT& other) const;
@@ -34,7 +35,7 @@ public:
 private:
   int capacity;
   int currentSize;
-  int* arr;
+  T* arr;
 
   void heapifyUp(int index);
   void heapifyDown(int index);
@@ -51,28 +52,32 @@ using std::endl;
 using std::swap;
 using std::copy;
 
-HeapT::HeapT(int capacity) {
+template <class T>
+HeapT<T>::HeapT(int capacity) {
 
   if (capacity <= 0) {
     throw runtime_error("Capacity must be positive!");
   }
   this->capacity = capacity;
   currentSize = 0;
-  arr = new int[capacity];
+  arr = new T[capacity];
 }
 
 // Copy Constructor
-HeapT::HeapT(const HeapT& other) {
+template <class T>
+HeapT<T>::HeapT(const HeapT& other) {
   copyFrom(other);
 }
 
 // Descructor
-HeapT::~HeapT() {
+template <class T>
+HeapT<T>::~HeapT() {
   delete[] arr;
 }
 
 // Assignment Operator
-HeapT& HeapT::operator=(const HeapT& other) {
+template <class T>
+HeapT<T>& HeapT<T>::operator=(const HeapT& other) {
   
   // If not the same, deep copy
   if (this != &other) {
@@ -83,7 +88,8 @@ HeapT& HeapT::operator=(const HeapT& other) {
 }
 
 // Insert Function
-void HeapT::insert(int val) {
+template <class T>
+void HeapT<T>::insert(T val) {
 
   // Check if heap is full
   if(currentSize >= capacity) {
@@ -100,7 +106,8 @@ void HeapT::insert(int val) {
 }
 
 // Remove Function
-int HeapT::remove() {
+template <class T>
+T HeapT<T>::remove() {
   
   // Check if array is empty
   if(currentSize == 0) {
@@ -108,7 +115,7 @@ int HeapT::remove() {
   } 
 
   // Save root value
-  int root = arr[0];
+  T root = arr[0];
 
   // Set the root index as the last element
   arr[0] = arr[currentSize -1];
@@ -120,24 +127,44 @@ int HeapT::remove() {
 }
 
 // Peek Function
-int HeapT::peek() const {
+template <class T>
+T HeapT<T>::peek() const {
+  if(currentSize == 0) {
+    throw runtime_error("Heap is empty!");
+  }
   return arr[0];
 }
 
 // Merge Function
-HeapT HeapT::merge(const HeapT& other) const {
+template <class T>
+HeapT<T> HeapT<T>::merge(const HeapT& other) const {
 
-  return HeapT(10);
+  // Create new heap with size of both heaps
+  HeapT mergedHeap(capacity + other.capacity);
+
+  // Copy both heaps into new heap
+  copy(arr, arr + currentSize, mergedHeap.arr);
+  copy(other.arr, other.arr + other.currentSize, mergedHeap.arr + currentSize);
+  mergedHeap.currentSize = currentSize + other.currentSize;
+ 
+  // Heapify new heap
+  for(int i = (mergedHeap.currentSize - 2)/2; i >= 0; i--) {
+    mergedHeap.heapifyDown(i);
+  }
+
+  return mergedHeap;
 }
 
 // Size Function
-int HeapT::size() const {
+template <class T>
+int HeapT<T>::size() const {
 
  return currentSize;
 }
 
 // Heapify Up Helper Function
-void HeapT::heapifyUp(int index) {
+template <class T>
+void HeapT<T>::heapifyUp(int index) {
   
   // Loop until root
   while(index > 0) {
@@ -154,37 +181,42 @@ void HeapT::heapifyUp(int index) {
 }
 
 // Heapify Down Function
-void HeapT::heapifyDown(int index) {
+template <class T>
+void HeapT<T>::heapifyDown(int index) {
 
   // Loop until index gets to bottom
   while (2* index + 1 < currentSize) {
     int leftChild = 2 * index + 1;
     int rightChild = leftChild + 1;
-    int largerChild = leftChild;
+    int smallerChild = leftChild;
 
-    // Check which child is greater
-    if (rightChild < currentSize && arr[rightChild] > arr[leftChild]) {
-      largerChild = rightChild;
+    // Check which child is smaller
+    if (rightChild < currentSize && arr[rightChild] < arr[leftChild]) {
+      smallerChild = rightChild;
     }
 
     // Stop when the index value is less than both children
-    if(arr[index] <= arr[largerChild]) {
+    if(arr[index] <= arr[smallerChild]) {
       break;
     }
-    swap(arr[index], arr[largerChild]);
-    index = largerChild;
+    swap(arr[index], arr[smallerChild]);
+    index = smallerChild;
   }
 }
 
 // Deep Copy Helper Function
-void HeapT::copyFrom(const HeapT& other) {
-
-  // Get all values of original heap
-  this->capacity = other.capacity;
-  this->currentSize = other.currentSize;
-  this->arr = new int[capacity];
+template <class T>
+void HeapT<T>::copyFrom(const HeapT& other) {
+  // Create new memory
+  this->arr = new T[capacity];
 
   // Copy
   copy(other.arr, other.arr + other.currentSize, this->arr);
+ 
+  // Get all values of original heap
+  this->capacity = other.capacity;
+  this->currentSize = other.currentSize;
+
+  
 }
 
