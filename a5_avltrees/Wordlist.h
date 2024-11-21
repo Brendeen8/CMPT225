@@ -12,9 +12,9 @@ public:
 	AVLTreeNode* parent;
 	AVLTreeNode* left;
 	AVLTreeNode* right;
-	string word;
-	unsigned int count;
-	unsigned int height;
+	string val;
+	unsigned int count;	
+	unsigned int size;
 
 };
 
@@ -25,22 +25,25 @@ private:
 	// Class attributes go here
 	// Your class MUST have a root node named root (below)
 	AVLTreeNode* root; // DO NOT REMOVE
+	unsigned int size;
 
 public:
 	
 
 	// Default Constructor
+	Wordlist();
 
 	// File Constructor
+	Wordlist(string fname);
 
 	// Copy Constructor
 
 	// Overloaded Assignment Operator
 
 	// Destructor
-
+	//~Wordlist();
 	// Insert
-
+	void insert(string word);
 	// Remove
 
 	// getCount
