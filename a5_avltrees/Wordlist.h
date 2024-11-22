@@ -12,9 +12,9 @@ public:
 	AVLTreeNode* parent;
 	AVLTreeNode* left;
 	AVLTreeNode* right;
-	string val;
+	string word;
 	unsigned int count;	
-	unsigned int size;
+	unsigned int height;
 
 };
 
@@ -25,7 +25,21 @@ private:
 	// Class attributes go here
 	// Your class MUST have a root node named root (below)
 	AVLTreeNode* root; // DO NOT REMOVE
-	unsigned int size;
+
+	// Insert Helper
+	AVLTreeNode* insert(AVLTreeNode* node, string word);
+
+	// Height Helper
+	int height(AVLTreeNode* node);
+
+	// getCount Helper
+	int getCount(AVLTreeNode* node, string word);
+
+	int countNodes(AVLTreeNode* node);
+
+	int countWords(AVLTreeNode* node);
+
+
 
 public:
 	
@@ -47,13 +61,13 @@ public:
 	// Remove
 
 	// getCount
-
+	int getCount(string word);
 	// Contains
-
+	bool contains(string word);
 	// differentWords
-
+	int differentWords();
 	// totalWords
-
+	int totalWords();
 	// mostFrequent
 
 	// Singletons
