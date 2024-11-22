@@ -35,11 +35,17 @@ private:
 	// getCount Helper
 	int getCount(AVLTreeNode* node, string word);
 
-	int countNodes(AVLTreeNode* node);
+	// Counts distinct words
+	int countNodes(AVLTreeNode* node) const;
 
-	int countWords(AVLTreeNode* node);
+	// Counts Total Words
+	int countWords(AVLTreeNode* node) const;
 
+	// Gets Most Frequent Word
+	void mostFrequent(AVLTreeNode* node, string& mostFrequentWord, int& highestCount) const;
 
+	// Gets how many words have exactly one count
+	void equalToOne(AVLTreeNode* node, int& total) const;
 
 public:
 	
@@ -65,13 +71,13 @@ public:
 	// Contains
 	bool contains(string word);
 	// differentWords
-	int differentWords();
+	int differentWords() const;
 	// totalWords
-	int totalWords();
+	int totalWords() const;
 	// mostFrequent
-
+	string mostFrequent() const;
 	// Singletons
-
+	int singletons() const;
 	// Print Words
 
 	// Prints useful statistics about the word list
