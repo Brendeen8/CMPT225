@@ -1,50 +1,50 @@
 #include "Wordlist.h"
 #include <iostream>
-using std::cout;
-using std::endl;
-using std::string;
+using namespace std;
 
-int main(void) {
-    cout << "Test" << endl;
+int main() {
+    cout << "=== Wordlist Test Driver (tiny_shakespeare.txt) ===" << endl;
 
-    cout << "Inserting 'cat' into word list" << endl;
+    // Test 1: File Constructor and Print Statistics
+    try {
+        cout << "\nTest 1: File Constructor and Print Statistics" << endl;
+        Wordlist wordlist("tiny_shakespeare.txt");
+        wordlist.printStatistics(); // Should print statistics as specified in the prompt
 
-    Wordlist myList;
-     // Insert words
-    myList.insert("cat");
-    myList.insert("dog");
-    myList.insert("cat"); // Duplicate
-    myList.insert("fish");
-    myList.insert("tiger");
+        // Test 2: Print Words
+        cout << "\nTest 2: Print Words" << endl;
+        //wordlist.printWords();
 
+        // Test 3: Check Contains and Get Count
+        cout << "\nTest 3: Check Contains and Get Count" << endl;
+        string testWord = "the";
+        if (wordlist.contains(testWord)) {
+            cout << "'" << testWord << "' is in the wordlist with count: " << wordlist.getCount(testWord) << endl;
+        } else {
+            cout << "'" << testWord << "' is not in the wordlist." << endl;
+        }
 
-    // Get counts
-    cout << "Count of 'cat': " << myList.getCount("cat") << endl; // Should print 2
-    cout << "Count of 'dog': " << myList.getCount("dog") << endl; // Should print 1
-    cout << "Count of 'bird': " << myList.getCount("bird") << endl; // Should print 0
-    cout << "Count of 'fish': " << myList.getCount("fish") << endl; // Should print 2
-    cout << "Count of 'tiger': " << myList.getCount("tiger") << endl; // Should print 2
-   
-    if(myList.contains("cat")) {
-        cout << "List contains 'cat'" << endl;
+        // Test 4: Remove a Word
+        cout << "\nTest 4: Remove a Word" << endl;
+        if (wordlist.remove(testWord)) {
+            cout << "Removed '" << testWord << "' from the wordlist." << endl;
+            wordlist.printStatistics(); // Check updated statistics
+        } else {
+            cout << "Could not remove '" << testWord << "' because it is not in the wordlist." << endl;
+        }
+
+        // Test 5: Most Frequent Word
+        cout << "\nTest 5: Most Frequent Word" << endl;
+        try {
+            cout << "Most frequent word: " << wordlist.mostFrequent() << endl;
+        } catch (const invalid_argument& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+
+    } catch (const invalid_argument& e) {
+        cout << "Error: Could not open the file tiny_shakespeare.txt. Make sure it exists in the folder." << endl;
     }
-    else {
-        cout << "List doesn't contain 'cat'" << endl;
-    }
 
-    if(myList.contains("bird")) {
-        cout << "List contains 'bird'" << endl;
-    }
-    else {
-        cout << "List doesn't contain 'bird'" << endl;
-    }
-    cout << "Number of distinct words: " << myList.differentWords() << endl;
-    cout << "Total words: " << myList.totalWords() << endl;
-    cout << "Most frequent word: " << myList.mostFrequent() << endl;
-    cout << "Number of words with count of 1: " << myList.singletons() << endl;
-
-    myList.printStatistics();
-    return 1;
-
-    
+    cout << "\n=== End of Test Driver ===" << endl;
+    return 0;
 }
