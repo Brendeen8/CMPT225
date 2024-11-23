@@ -26,6 +26,11 @@ Wordlist::Wordlist(string fname) {
 	myFile.open(fname);
 	string next;
 
+	// Check if file can open 
+	if (!myFile.is_open()) {
+    	throw std::invalid_argument("Could not open file: " + fname);
+	}
+
 	// Insert text into wordlist
 	while(myFile >> next) {
 		insert(next);
@@ -233,9 +238,11 @@ void Wordlist::destructor(AVLTreeNode* node) {
 // Height Helper Function
 int Wordlist::height(AVLTreeNode* node) {
 
+	// If list is not empty, return the height
 	if(node != nullptr) {
 		return node->height;
 	}
+	// -1 if empty
 	else {
 		return -1;
 	}
@@ -245,6 +252,7 @@ int Wordlist::height(AVLTreeNode* node) {
 // Insert Helper Function
 AVLTreeNode* Wordlist::insert(AVLTreeNode* node, string word) {
 
+	// If empty, create a new node
 	if(node == nullptr) {
 		node = new AVLTreeNode();
 		node->word = word;
@@ -272,6 +280,7 @@ AVLTreeNode* Wordlist::insert(AVLTreeNode* node, string word) {
 		return node;
 	}
 	
+	// Set height
 	node->height = 1 + max(height(node->left), height(node->right));
 
  	// Calculate the balance factor
@@ -279,29 +288,28 @@ AVLTreeNode* Wordlist::insert(AVLTreeNode* node, string word) {
 
     // Balance the tree based on the balance factor
 
-    // Left-Left (LL) Case
+    // Left-Left Case
     if (balanceFactor > 1 && word < node->left->word) {
         return rotateRight(node);
     }
 
-    // Right-Right (RR) Case
+    // Right-Right Case
     if (balanceFactor < -1 && word > node->right->word) {
         return rotateLeft(node);
     }
 
-    // Left-Right (LR) Case
+    // Left-Right Case
     if (balanceFactor > 1 && word > node->left->word) {
         node->left = rotateLeft(node->left);
         return rotateRight(node);
     }
 
-    // Right-Left (RL) Case
+    // Right-Left Case
     if (balanceFactor < -1 && word < node->right->word) {
         node->right = rotateRight(node->right);
         return rotateLeft(node);
     }
 
-    // Return the (potentially updated) node pointer
     return node;
 
 }
@@ -309,42 +317,48 @@ AVLTreeNode* Wordlist::insert(AVLTreeNode* node, string word) {
 // Remove Helper Function
 AVLTreeNode* Wordlist::remove(AVLTreeNode* node, string word, bool& wasRemoved) {
 
+	// If empty, return
 	if(node == nullptr) {
 		wasRemoved = false;
 		return nullptr;
 	}
+	
+	// Traverse Left Subtree
 	if(word < node->word) {
 		node->left = remove(node->left, word, wasRemoved);
 	}
+	// Traverse Right Subtree
 	else if(word > node->word) {
 		node->right = remove(node->right, word, wasRemoved);
 	}
 	else {
 		wasRemoved = true;
 
+		// Case if no children
 		if(node->left == nullptr && node->right == nullptr) {
 			delete node;
 			return nullptr;
 		}
 
+		// Case if one child
 		if(node->left == nullptr) {
 			AVLTreeNode* temp = node->right;
 			delete node;
 			return temp;
 		}
-
+		// Case if one child
 		if(node->right == nullptr) {
 			AVLTreeNode* temp = node->left;
 			delete node;
 			return temp;
 		}
-
+	// Case if 2 children
 	AVLTreeNode* successor = findMin(node->right);
 	node->word = successor->word;
 	node->count = successor->count;
 	node->right = remove(node->right, successor->word, wasRemoved);
 	}
-
+	// Get height
 	node->height = 1 + max(height(node->left), height(node->right));
 	return balance(node);
 	
@@ -352,31 +366,38 @@ AVLTreeNode* Wordlist::remove(AVLTreeNode* node, string word, bool& wasRemoved) 
 
 // Find Min (remove helper)
 AVLTreeNode* Wordlist::findMin(AVLTreeNode* node) {
+
+	// Traverse through left subtree 
 	while(node->left != nullptr) {
 		node = node->left;
 	}
 	return node;
 }
 
-// Balance (remove and insert helper)
+// Balance (remove helper)
 AVLTreeNode* Wordlist::balance(AVLTreeNode* node) {
 	int balanceFactor = height(node->left) - height(node->right);
 
+	
 	if (balanceFactor > 1) {
+		// Left-Left Case
    	 	if (height(node->left->left) >= height(node->left->right)) {
-        	return rotateRight(node); // Left-Left (LL) Case
+        	return rotateRight(node); 
     } 
 		else {
-        	node->left = rotateLeft(node->left); // Left-Right (LR) Case
+			// Left-Right Case
+        	node->left = rotateLeft(node->left); 
         	return rotateRight(node);
     	}
 	}
 	if (balanceFactor < -1) {
+		// Right-Right Case
     	if (height(node->right->right) >= height(node->right->left)) {
-     	   return rotateLeft(node); // Right-Right (RR) Case
+     	   return rotateLeft(node); 
    	} 
 	else {
-        node->right = rotateRight(node->right); // Right-Left (RL) Case
+		// Right-Left Case
+        node->right = rotateRight(node->right); 
         return rotateLeft(node);
     }
 }
@@ -418,10 +439,12 @@ AVLTreeNode* Wordlist::rotateRight(AVLTreeNode* y) {
 
 // getCount Helper Function (How many times parameter is in list)
 int Wordlist::getCount(AVLTreeNode* node, string word) {
-	// Return 0 if list is empty
+
+	// Base Case
 	if(node == nullptr) {
 		return 0;
 	}
+
 	// Traverse list in order
 	else if(word < node->word) {
 		return getCount(node->left, word);
@@ -436,27 +459,34 @@ int Wordlist::getCount(AVLTreeNode* node, string word) {
 
 // differentWords Helper Function (Number of distinct words)
 int Wordlist::countNodes(AVLTreeNode* node) const{
+
+	// Base Case
 	if(node == nullptr) {
 		return 0;
 	}
+	// Recursively Count nodes, add one for each node
 	return 1 + countNodes(node->left) + countNodes(node->right);
 }
 
 // totalWords Helper Function (Counts the total amount of words)
 int Wordlist::countWords(AVLTreeNode* node) const{
+	// Base Case
 	if(node == nullptr) {
 		return 0;
 	}
+	// Return the count for every node
 	return node->count + countWords(node->left) + countWords(node->right);
 }
 
 // mostFrequent Helper Function 
 void Wordlist::mostFrequent(AVLTreeNode* node, string& mostFrequentWord, int& highestCount) const{
 	
+	// Base Case
 	if(node == nullptr) {
 		return;
 	}
 
+	// Traverse in order
 	mostFrequent(node->left, mostFrequentWord, highestCount);
 
 	if(node->count > highestCount) {
@@ -469,10 +499,12 @@ void Wordlist::mostFrequent(AVLTreeNode* node, string& mostFrequentWord, int& hi
 
 void Wordlist::equalToOne(AVLTreeNode* node, int& total) const{
 
+	// Base Case
 	if(node == nullptr) {
 		return;
 	}
 
+	// Traverse in order
 	equalToOne(node->left, total);
 
 	if(node->count == 1) {
@@ -485,9 +517,11 @@ void Wordlist::equalToOne(AVLTreeNode* node, int& total) const{
 // printWords Helper
 void Wordlist::printWords(AVLTreeNode* node, int& currentNode) {
 
+	// Base Case
 	if(node == nullptr) {
 		return;
 	}
+	// Traverse in order
 	// Traverse Left Subtree
 	printWords(node->left, currentNode);
 
