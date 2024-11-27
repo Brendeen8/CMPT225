@@ -105,7 +105,7 @@ int HeapT::size() const {
  return currentSize;
 }
 
-// Heapify Helper Function
+// Heapify Down Helper Function
 void HeapT::heapifyUp(int index) {
   while(index > 0) {
     int parent = (index - 1)/2;
@@ -115,6 +115,11 @@ void HeapT::heapifyUp(int index) {
     swap(arr[index], arr[parent]);
     index = parent;
   }
+}
+
+// Heapify Down Helper Function
+void HeapT::heapifyDown(int index) {
+
 }
 
 
