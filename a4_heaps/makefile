@@ -1,2 +1,2 @@
-run: Heapt.h main.cpp
-	g++ -o run Heapt.h main.cpp
+run: HeapT.h main.cpp largestm.h
+	g++ -o run main.cpp 
