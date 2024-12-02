@@ -23,14 +23,14 @@ PlayList::PlayList(const PlayList& pl)
     return; 
   }
 
-  // Copy first node
+  //Copy first node
   head = new PlayListNode(pl.head->song);
   PlayListNode* currentSource = pl.head->next;
   PlayListNode* currentDest = head;
 
   // Copy rest of nodes
   while(currentSource != nullptr) {
-    currentDest->next = new PlayListNode(currentSource->song);
+  currentDest->next = new PlayListNode(currentSource->song);
     currentDest = currentDest->next;
     currentSource = currentSource->next;
   }
@@ -209,7 +209,7 @@ void PlayList::swap(unsigned int pos1, unsigned int pos2)
 Song PlayList::get(unsigned int pos) const
 {
   // Check if positions are valid
-  if(pos > current_size) {
+  if(pos > current_size) { 
     cout << "INVALID POSTION" << endl;
     return Song("INVALID", "INVALID", 0);
   }
